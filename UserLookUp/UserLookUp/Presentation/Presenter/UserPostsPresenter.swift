@@ -8,15 +8,11 @@
 
 import Foundation
 
-// MARK: - User Posts Presenter
-
-
 public final class UserPostsPresenter: UserPostsPresenterContract {
     
     private weak var view: UserPostsViewContract?
     private var dataManager: UserPostsDataManagerContract
     private let userId: Int
-    
     private var posts: [Post] = []
     
     public var numberOfPosts: Int {
@@ -36,7 +32,7 @@ public final class UserPostsPresenter: UserPostsPresenterContract {
     }
     
     public func didSelectPost(at index: Int) {
-        // Implement navigation to post detail if needed
+        
     }
     
     public func post(at index: Int) -> Post? {
@@ -46,20 +42,17 @@ public final class UserPostsPresenter: UserPostsPresenterContract {
     
     private func fetchPosts() {
         view?.showLoading()
-        
         dataManager.fetchPosts(userId: userId, successBlock: { [weak self] posts in
             guard let self = self else { return }
-            
             DispatchQueue.main.async {
                 self.posts = posts
                 self.view?.hideLoading()
                 self.view?.showPosts(posts)
             }
-            
         }, failureBlock: { [weak self] error in
             DispatchQueue.main.async {
                 self?.view?.hideLoading()
-                self?.view?.showError(self?.errorMessage(for: error) ?? "An error occurred")
+                self?.view?.showError(self?.errorMessage(for: error) ?? "Failed to load posts")
             }
         })
     }
@@ -71,9 +64,9 @@ public final class UserPostsPresenter: UserPostsPresenterContract {
         case .timeout:
             return "Request timed out"
         case .decodingFailed:
-            return "Failed to process data"
+            return "Failed to process posts"
         case .requestFailed:
-            return error.message ?? "Request failed"
+            return error.message ?? "Failed to load posts"
         case .unknown:
             return error.message ?? "Something went wrong"
         }

@@ -1,6 +1,5 @@
 import UIKit
 
-
 final class UserDetailViewController: UIViewController {
     
     enum Tab: Int {
@@ -14,13 +13,38 @@ final class UserDetailViewController: UIViewController {
     private let user: User
     private var posts: [Post] = []
     var postsPresenter: UserPostsPresenterContract?
-    
     private var currentTab: Tab = .details
     
+    private let avatarHeaderView: UserAvatarHeaderView = {
+        let view = UserAvatarHeaderView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private lazy var segmentedControl: UISegmentedControl = {
-        let control = UISegmentedControl(items: ["User Details", "User Posts"])
+        let firstName = user.name.components(separatedBy: " ").first ?? user.name
+        let control = UISegmentedControl(items: ["\(firstName)'s Details", "\(firstName)'s Posts"])
+        control.translatesAutoresizingMaskIntoConstraints = false
         control.selectedSegmentIndex = 0
         control.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
+        
+        control.backgroundColor = UIColor.systemGray6.withAlphaComponent(0.3)
+        control.selectedSegmentTintColor = .white
+        control.layer.cornerRadius = 8
+        control.layer.masksToBounds = true
+        
+        let normalTextAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.secondaryLabel,
+            .font: UIFont.systemFont(ofSize: 15, weight: .medium)
+        ]
+        control.setTitleTextAttributes(normalTextAttributes, for: .normal)
+        
+        let selectedTextAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.label,
+            .font: UIFont.systemFont(ofSize: 15, weight: .semibold)
+        ]
+        control.setTitleTextAttributes(selectedTextAttributes, for: .selected)
+        
         return control
     }()
     
@@ -32,7 +56,39 @@ final class UserDetailViewController: UIViewController {
         return table
     }()
     
-    // MARK: - Initialization
+    private let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
+    private let postsEmptyStateView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    private let postsEmptyImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .systemGray3
+        let config = UIImage.SymbolConfiguration(pointSize: 60, weight: .light, scale: .large)
+        imageView.image = UIImage(systemName: "doc.text.magnifyingglass", withConfiguration: config)
+        return imageView
+    }()
+    
+    private let postsEmptyLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "No Posts Available"
+        label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        label.textColor = .secondaryLabel
+        label.textAlignment = .center
+        return label
+    }()
     
     init(user: User) {
         self.user = user
@@ -43,23 +99,34 @@ final class UserDetailViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - View Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavigationBar()
         setupUI()
+        setupPostsEmptyState()
+        avatarHeaderView.configure(with: user)
         postsPresenter?.viewDidLoad()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
+    private func setupNavigationBar() {
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationController?.navigationBar.tintColor = UIColor(red: 0.0/255.0, green: 71.0/255.0, blue: 131.0/255.0, alpha: 1.0)
+        navigationItem.backButtonTitle = "Back"
+    }
+    
     private func setupUI() {
-        title = user.name
         view.backgroundColor = .systemGroupedBackground
         
-        // Add segmented control to navigation bar
-        navigationItem.titleView = segmentedControl
-        
-        // Setup table view
+        view.addSubview(avatarHeaderView)
+        view.addSubview(segmentedControl)
         view.addSubview(tableView)
+        view.addSubview(activityIndicator)
+        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "basic")
         tableView.register(PostCell.self, forCellReuseIdentifier: PostCell.reuseIdentifier)
         tableView.estimatedRowHeight = 120
@@ -67,19 +134,60 @@ final class UserDetailViewController: UIViewController {
         tableView.backgroundColor = .systemGroupedBackground
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            avatarHeaderView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            avatarHeaderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            avatarHeaderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            avatarHeaderView.heightAnchor.constraint(equalToConstant: 120),
+            
+            segmentedControl.topAnchor.constraint(equalTo: avatarHeaderView.bottomAnchor, constant: 8),
+            segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            segmentedControl.heightAnchor.constraint(equalToConstant: 36),
+            
+            tableView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 8),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+    }
+    
+    private func setupPostsEmptyState() {
+        tableView.backgroundView = postsEmptyStateView
+        
+        let stackView = UIStackView(arrangedSubviews: [postsEmptyImageView, postsEmptyLabel])
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.spacing = 16
+        
+        postsEmptyStateView.addSubview(stackView)
+        
+        NSLayoutConstraint.activate([
+            stackView.centerXAnchor.constraint(equalTo: postsEmptyStateView.centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: postsEmptyStateView.centerYAnchor),
+            postsEmptyImageView.widthAnchor.constraint(equalToConstant: 100),
+            postsEmptyImageView.heightAnchor.constraint(equalToConstant: 100)
+        ])
+        
+        postsEmptyStateView.isHidden = true
     }
     
     @objc private func segmentChanged(_ sender: UISegmentedControl) {
         currentTab = Tab(rawValue: sender.selectedSegmentIndex) ?? .details
         tableView.reloadData()
+        updateEmptyState()
     }
     
-    // MARK: - Helper Actions
+    private func updateEmptyState() {
+        if currentTab == .posts && posts.isEmpty {
+            postsEmptyStateView.isHidden = false
+        } else {
+            postsEmptyStateView.isHidden = true
+        }
+    }
     
     private func openEmail() {
         guard let url = URL(string: "mailto:\(user.email)") else { return }
@@ -100,8 +208,6 @@ final class UserDetailViewController: UIViewController {
     }
 }
 
-// MARK: - UITableViewDataSource & UITableViewDelegate
-
 extension UserDetailViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -116,7 +222,7 @@ extension UserDetailViewController: UITableViewDataSource, UITableViewDelegate {
             case .company: return "COMPANY"
             }
         } else {
-            return "POSTS"
+            return posts.isEmpty ? nil : "POSTS"
         }
     }
     
@@ -135,7 +241,7 @@ extension UserDetailViewController: UITableViewDataSource, UITableViewDelegate {
             case .company: return 2
             }
         } else {
-            return posts.isEmpty ? 1 : posts.count
+            return posts.count
         }
     }
     
@@ -149,24 +255,36 @@ extension UserDetailViewController: UITableViewDataSource, UITableViewDelegate {
     
     private func configureDetailsCell(for indexPath: IndexPath) -> UITableViewCell {
         let section = DetailsSection(rawValue: indexPath.section)!
+        
         switch section {
         case .contact:
             let cell = tableView.dequeueReusableCell(withIdentifier: "basic", for: indexPath)
             cell.accessoryType = .disclosureIndicator
             cell.selectionStyle = .default
             var cfg = cell.defaultContentConfiguration()
+            
             switch indexPath.row {
             case 0:
+                let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+                cfg.image = UIImage(systemName: "envelope.fill", withConfiguration: symbolConfig)
+                cfg.imageProperties.tintColor = UIColor(red: 0.0/255.0, green: 71.0/255.0, blue: 131.0/255.0, alpha: 1.0)
                 cfg.text = "Email"
                 cfg.secondaryText = user.email
             case 1:
+                let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+                cfg.image = UIImage(systemName: "phone.fill", withConfiguration: symbolConfig)
+                cfg.imageProperties.tintColor = .systemGreen
                 cfg.text = "Phone"
                 cfg.secondaryText = user.phone
             case 2:
+                let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+                cfg.image = UIImage(systemName: "globe", withConfiguration: symbolConfig)
+                cfg.imageProperties.tintColor = .systemOrange
                 cfg.text = "Website"
                 cfg.secondaryText = user.website
             default: break
             }
+            
             cfg.textProperties.color = .label
             cfg.textProperties.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
             cfg.secondaryTextProperties.color = .secondaryLabel
@@ -180,6 +298,11 @@ extension UserDetailViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: "basic", for: indexPath)
             cell.selectionStyle = .none
             var cfg = cell.defaultContentConfiguration()
+            
+            let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+            cfg.image = UIImage(systemName: "mappin.and.ellipse", withConfiguration: symbolConfig)
+            cfg.imageProperties.tintColor = .systemRed
+            
             cfg.text = "\(user.address.street), \(user.address.suite)"
             cfg.secondaryText = "\(user.address.city) • \(user.address.zipcode)"
             cfg.textProperties.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
@@ -195,15 +318,23 @@ extension UserDetailViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: "basic", for: indexPath)
             cell.selectionStyle = .none
             var cfg = cell.defaultContentConfiguration()
+            
             if indexPath.row == 0 {
+                let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+                cfg.image = UIImage(systemName: "building.2.fill", withConfiguration: symbolConfig)
+                cfg.imageProperties.tintColor = .systemPurple
                 cfg.text = user.company.name
                 cfg.textProperties.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
                 cfg.textProperties.color = .label
             } else {
+                let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+                cfg.image = UIImage(systemName: "quote.opening", withConfiguration: symbolConfig)
+                cfg.imageProperties.tintColor = .systemGray
                 cfg.text = user.company.catchPhrase
                 cfg.textProperties.color = .secondaryLabel
                 cfg.textProperties.font = UIFont.systemFont(ofSize: 15, weight: .regular)
             }
+            
             cfg.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
             cell.contentConfiguration = cfg
             cell.backgroundColor = .secondarySystemGroupedBackground
@@ -211,32 +342,13 @@ extension UserDetailViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UserHeaderView()
-        headerView.configure(with: user)
-        return headerView
-    }
-    
-    
     private func configurePostsCell(for indexPath: IndexPath) -> UITableViewCell {
-        if posts.isEmpty {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "basic", for: indexPath)
-            cell.selectionStyle = .none
-            var cfg = cell.defaultContentConfiguration()
-            cfg.text = "No posts"
-            cfg.textProperties.color = .secondaryLabel
-            cfg.textProperties.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-            cell.contentConfiguration = cfg
-            cell.backgroundColor = .secondarySystemGroupedBackground
-            return cell
-        } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PostCell.reuseIdentifier, for: indexPath) as? PostCell else {
-                return UITableViewCell()
-            }
-            let post = posts[indexPath.row]
-            cell.configure(with: post)
-            return cell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PostCell.reuseIdentifier, for: indexPath) as? PostCell else {
+            return UITableViewCell()
         }
+        let post = posts[indexPath.row]
+        cell.configure(with: post)
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -249,24 +361,20 @@ extension UserDetailViewController: UITableViewDataSource, UITableViewDelegate {
                 case 2: openWebsite()
                 default: break
                 }
-                tableView.deselectRow(at: indexPath, animated: true)
             }
+            tableView.deselectRow(at: indexPath, animated: true)
         } else {
-            if !posts.isEmpty {
-                postsPresenter?.didSelectPost(at: indexPath.row)
-            }
+            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
 }
 
-// MARK: - UserPostsViewContract
-
 extension UserDetailViewController: UserPostsViewContract {
-    
     func showPosts(_ posts: [Post]) {
         self.posts = posts
         if currentTab == .posts {
             tableView.reloadData()
+            updateEmptyState()
         }
     }
     
@@ -277,10 +385,12 @@ extension UserDetailViewController: UserPostsViewContract {
     }
     
     func showLoading() {
-        // You can add a loading indicator for posts section if needed
+        activityIndicator.startAnimating()
+        tableView.isUserInteractionEnabled = false
     }
     
     func hideLoading() {
-        // Hide loading indicator
+        activityIndicator.stopAnimating()
+        tableView.isUserInteractionEnabled = true
     }
 }

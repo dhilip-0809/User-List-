@@ -1,28 +1,10 @@
-//
-//  UsersListPresenter.swift
-//  UserLookUp
-//
-//  Created by Dhilip R on 23/10/25.
-//
-
-
-//
-//  UserListPresenter.swift
-//  User LookUp
-//
-//  Created by Dhilip R on 23/10/25.
-//
-
 import Foundation
-
-// MARK: - Users List Presenter
 
 public final class UsersListPresenter: UsersListPresenterContract {
     
     private weak var view: UsersListViewContract?
     private var dataManager: UsersListDataManagerContract
     private var router: UsersListRouterContract?
-    
     private var allUsers: [User] = []
     private var filteredUsers: [User] = []
     
@@ -48,12 +30,12 @@ public final class UsersListPresenter: UsersListPresenterContract {
     
     public func didSearchUsers(with query: String) {
         if query.isEmpty {
-            filteredUsers = allUsers
+            filteredUsers = []
         } else {
             filteredUsers = allUsers.filter {
                 $0.name.localizedCaseInsensitiveContains(query) ||
                 $0.username.localizedCaseInsensitiveContains(query) ||
-                $0.company.name.localizedCaseInsensitiveContains(query)
+                $0.email.localizedCaseInsensitiveContains(query)
             }
         }
         view?.showUsers(filteredUsers)
@@ -72,17 +54,14 @@ public final class UsersListPresenter: UsersListPresenterContract {
     
     private func fetchUsers() {
         view?.showLoading()
-        
         dataManager.fetchUsers(successBlock: { [weak self] users in
             guard let self = self else { return }
-            
             DispatchQueue.main.async {
                 self.allUsers = users.sorted { $0.name < $1.name }
-                self.filteredUsers = self.allUsers
+                self.filteredUsers = []
                 self.view?.hideLoading()
                 self.view?.showUsers(self.filteredUsers)
             }
-            
         }, failureBlock: { [weak self] error in
             DispatchQueue.main.async {
                 self?.view?.hideLoading()
@@ -94,15 +73,15 @@ public final class UsersListPresenter: UsersListPresenterContract {
     private func errorMessage(for error: UsersListError) -> String {
         switch error.type {
         case .networkUnavailable:
-            return "No internet connection"
+            return "No internet connection. Please check your network."
         case .timeout:
-            return "Request timed out"
+            return "Request timed out. Please try again."
         case .decodingFailed:
-            return "Failed to process data"
+            return "Failed to process data from server."
         case .requestFailed:
-            return error.message ?? "Request failed"
+            return error.message ?? "Request failed. Please try again."
         case .unknown:
-            return error.message ?? "Something went wrong"
+            return error.message ?? "Something went wrong. Please try again."
         }
     }
 }

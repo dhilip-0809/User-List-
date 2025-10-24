@@ -3,205 +3,163 @@ import UIKit
 final class UserCell: UITableViewCell {
     
     static let reuseIdentifier = "UserCell"
-
-    // MARK: - UI
     
-    private let containerView: UIView = {
-        let v = UIView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.layer.cornerRadius = 12
-        v.clipsToBounds = true
-        // use semantic background color so it adapts to light/dark and accessibility
-     //   v.backgroundColor = .secondarySystemBackground
-        return v
+    private let cardContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .secondarySystemBackground
+        view.layer.cornerRadius = 16
+        view.layer.masksToBounds = false
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.08
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowRadius = 6
+        return view
     }()
-
-    // Avatar: keep >= 40 points for HIG touch target; using 48 gives some breathing room
+    
     private let avatarView: UIView = {
-        let v = UIView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.layer.cornerRadius = 24 // will match 48x48 size
-        v.clipsToBounds = true
-        v.isAccessibilityElement = false // label will expose content
-        return v
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 26
+        view.clipsToBounds = true
+        view.layer.borderWidth = 0.2
+        view.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
+        return view
     }()
-
+    
     private let avatarLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        // use a headline-ish preferred style for good scaling with Dynamic Type
-        l.font = UIFont.preferredFont(forTextStyle: .headline)
-        l.adjustsFontForContentSizeCategory = true
-        l.textAlignment = .center
-        l.textColor = .white
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
+        label.textColor = .white
+        label.textAlignment = .center
+        label.adjustsFontForContentSizeCategory = true
+        return label
     }()
-
-    private let nameLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.preferredFont(forTextStyle: .body) // primary text
-        l.adjustsFontForContentSizeCategory = true
-        l.numberOfLines = 1
-        l.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-        return l
-    }()
-
+    
     private let usernameLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        l.adjustsFontForContentSizeCategory = true
-        l.textColor = .secondaryLabel
-        l.numberOfLines = 1
-        return l
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        label.adjustsFontForContentSizeCategory = true
+        label.textColor = .label
+        label.numberOfLines = 1
+        return label
     }()
-
-    private let companyLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        l.adjustsFontForContentSizeCategory = true
-        l.textColor = .tertiaryLabel
-        l.numberOfLines = 1
-        return l
+    
+    private let nameLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.adjustsFontForContentSizeCategory = true
+        label.textColor = .secondaryLabel
+        label.numberOfLines = 1
+        return label
     }()
-
-    // MARK: - Init
+    
+    private let chevronImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        let config = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold)
+        imageView.image = UIImage(systemName: "chevron.right", withConfiguration: config)
+        imageView.tintColor = .tertiaryLabel
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
         configureAccessibility()
-        companyLabel.isHidden = true
     }
     
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    // MARK: - Layout
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     private func setupUI() {
-        contentView.addSubview(containerView)
-        containerView.addSubview(avatarView)
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
+        selectionStyle = .none
+        
+        contentView.addSubview(cardContainer)
+        cardContainer.addSubview(avatarView)
         avatarView.addSubview(avatarLabel)
-        containerView.addSubview(nameLabel)
-        containerView.addSubview(usernameLabel)
-       // containerView.addSubview(companyLabel)
-
-        // Use layout margins for readable spacing (HIG: readable content margins)
-       // containerView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
-
+        cardContainer.addSubview(usernameLabel)
+        cardContainer.addSubview(nameLabel)
+        cardContainer.addSubview(chevronImageView)
+        
         NSLayoutConstraint.activate([
-            // Container respects contentView safe area and has comfortable margins
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
-
-            // Avatar
-            avatarView.leadingAnchor.constraint(equalTo: containerView.layoutMarginsGuide.leadingAnchor),
-            avatarView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            avatarView.widthAnchor.constraint(equalToConstant: 48),
-            avatarView.heightAnchor.constraint(equalToConstant: 48),
-
-            // Avatar label centered
+            cardContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
+            cardContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            cardContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            cardContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6),
+            
+            avatarView.leadingAnchor.constraint(equalTo: cardContainer.leadingAnchor, constant: 12),
+            avatarView.centerYAnchor.constraint(equalTo: cardContainer.centerYAnchor),
+            avatarView.widthAnchor.constraint(equalToConstant: 52),
+            avatarView.heightAnchor.constraint(equalToConstant: 52),
+            
             avatarLabel.centerXAnchor.constraint(equalTo: avatarView.centerXAnchor),
             avatarLabel.centerYAnchor.constraint(equalTo: avatarView.centerYAnchor),
-            avatarLabel.leadingAnchor.constraint(greaterThanOrEqualTo: avatarView.leadingAnchor, constant: 4),
-            avatarLabel.trailingAnchor.constraint(lessThanOrEqualTo: avatarView.trailingAnchor, constant: -4),
-
-            // Text stack
-            nameLabel.topAnchor.constraint(equalTo: containerView.layoutMarginsGuide.topAnchor),
-            nameLabel.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: 12),
-            nameLabel.trailingAnchor.constraint(equalTo: containerView.layoutMarginsGuide.trailingAnchor),
-
-            usernameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
-            usernameLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            usernameLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
-            usernameLabel.bottomAnchor.constraint(lessThanOrEqualTo: containerView.layoutMarginsGuide.bottomAnchor)
-
-//            companyLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 2),
-//            companyLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-//            companyLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
-//            companyLabel.bottomAnchor.constraint(lessThanOrEqualTo: containerView.layoutMarginsGuide.bottomAnchor)
+            
+            usernameLabel.topAnchor.constraint(equalTo: cardContainer.topAnchor, constant: 16),
+            usernameLabel.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: 12),
+            usernameLabel.trailingAnchor.constraint(lessThanOrEqualTo: chevronImageView.leadingAnchor, constant: -12),
+            
+            nameLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 4),
+            nameLabel.leadingAnchor.constraint(equalTo: usernameLabel.leadingAnchor),
+            nameLabel.trailingAnchor.constraint(equalTo: usernameLabel.trailingAnchor),
+            nameLabel.bottomAnchor.constraint(equalTo: cardContainer.bottomAnchor, constant: -16),
+            
+            chevronImageView.trailingAnchor.constraint(equalTo: cardContainer.trailingAnchor, constant: -16),
+            chevronImageView.centerYAnchor.constraint(equalTo: cardContainer.centerYAnchor),
+            chevronImageView.widthAnchor.constraint(equalToConstant: 8),
+            chevronImageView.heightAnchor.constraint(equalToConstant: 14),
+            
+            cardContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: 76)
         ])
-
-        // Let the cell adjust for Dynamic Type height changes
+        
+        usernameLabel.setContentCompressionResistancePriority(.required, for: .vertical)
         nameLabel.setContentCompressionResistancePriority(.required, for: .vertical)
-        usernameLabel.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-        companyLabel.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-
-        // Selection style: default is fine; if you want no highlight, set .none
-        selectionStyle = .default
-
-        // Slight shadow is discouraged for table cells in HIG by default; keep it subtle or none.
-        backgroundColor = .systemBackground
     }
-
-    // MARK: - Configure
     
-    /// Configure with user and indexPath row for index-based color
     func configure(with user: User, at indexPath: IndexPath) {
-        // Text
-        nameLabel.text = user.username
-       // usernameLabel.text = "@\(user.username)"
-        usernameLabel.text = user.name
-        companyLabel.text = user.name
-
-        // Avatar initial
-        let initial = String(user.name.trimmingCharacters(in: .whitespacesAndNewlines).prefix(1)).uppercased()
-        avatarLabel.text = initial
-
-        // Index-based color (hue-based for smooth distribution)
-        let bgColor = colorForIndex(indexPath.row)
-        avatarView.backgroundColor = bgColor
-
-        // Ensure good contrast on the initial: if background is light, use .label, else white
-    //    avatarLabel.textColor = bgColor.isLight ? .label : .white
-
-        // Use same accent color for name text but keep subtle: do not overpower
-     //   nameLabel.textColor = bgColor
-
-        // Accessibility value (VoiceOver)
-        let companyPart = companyLabel.text ?? ""
-        accessibilityLabel = "\(user.name), \(companyPart). Username \(usernameLabel.text ?? "")"
-        accessibilityTraits = .button // or .staticText depending on interactivity in your app
-
-        // accessibility identifiers (useful for UI tests)
-        avatarView.accessibilityIdentifier = "UserCell.avatar.\(user.username)"
-        nameLabel.accessibilityIdentifier = "UserCell.name.\(user.username)"
+        usernameLabel.text = user.username
+        nameLabel.text = user.name
+        
+        let firstName = user.name.components(separatedBy: " ").first ?? user.name
+        if let firstCharacter = firstName.first {
+            avatarLabel.text = String(firstCharacter).uppercased()
+            avatarView.backgroundColor = AvatarColorHelper.getColor(for: firstCharacter)
+        } else {
+            avatarLabel.text = "?"
+            avatarView.backgroundColor = .systemGray
+        }
+        
+        setNeedsLayout()
+        layoutIfNeeded()
+        
+        accessibilityLabel = "User: \(user.username), Name: \(user.name)"
+        accessibilityTraits = .button
+        accessibilityHint = "Double tap to view user details"
     }
-
+    
     override func prepareForReuse() {
         super.prepareForReuse()
-        nameLabel.text = nil
         usernameLabel.text = nil
-        companyLabel.text = nil
+        nameLabel.text = nil
         avatarLabel.text = nil
         avatarView.backgroundColor = nil
-        avatarLabel.textColor = .white
-        accessibilityLabel = nil
     }
-
-    // MARK: - Accessibility Config
     
     private func configureAccessibility() {
-        isAccessibilityElement = false
-        // Keep individual elements accessible if needed; we set cell-level label on configure()
-        nameLabel.isAccessibilityElement = false
-        usernameLabel.isAccessibilityElement = false
-        companyLabel.isAccessibilityElement = false
-        avatarLabel.isAccessibilityElement = false
+        isAccessibilityElement = true
+        accessibilityTraits = .button
     }
-
-    // MARK: - Color helper (index-based)
     
-    /// Return a visually distinct color for a row index using hue rotation.
-    private func colorForIndex(_ index: Int) -> UIColor {
-        // multiplier chosen to 'jump' hue sufficiently to reduce rapid repetition.
-        // saturation/brightness set for good contrast with white text.
-        let hueDegrees = (index * 41) % 360
-        let hue = CGFloat(hueDegrees) / 360.0
-        return UIColor(hue: hue, saturation: 0.6, brightness: 0.86, alpha: 1.0)
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        cardContainer.layer.shadowPath = UIBezierPath(roundedRect: cardContainer.bounds, cornerRadius: 16).cgPath
     }
 }
