@@ -81,7 +81,7 @@ class PostCell: UITableViewCell {
             
             titleLabel.topAnchor.constraint(equalTo: cardContainer.topAnchor, constant: 16),
             titleLabel.leadingAnchor.constraint(equalTo: postIconView.trailingAnchor, constant: 12),
-            titleLabel.trailingAnchor.constraint(equalTo: cardContainer.trailingAnchor, constant: -16),  // Changed: no chevron gap
+            titleLabel.trailingAnchor.constraint(equalTo: cardContainer.trailingAnchor, constant: -16),  
             
             bodyLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
             bodyLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),

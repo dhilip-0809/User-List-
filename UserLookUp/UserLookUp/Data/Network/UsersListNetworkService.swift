@@ -1,6 +1,5 @@
 import Foundation
 
-// MARK: - Users List Network Service
 
 public final class UsersListNetworkService: UsersListNetworkServiceContract {
     

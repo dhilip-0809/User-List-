@@ -18,7 +18,6 @@ public final class UserPostsDataManager: UserPostsDataManagerContract {
     
     public func fetchPosts(userId: Int, successBlock: @escaping ([Post]) -> Void, failureBlock: @escaping (UserPostsError) -> Void) {
         networkService.fetchPosts(userId: userId, successBlock: { posts in
-            // Here you can add additional data processing, caching, etc.
             successBlock(posts)
         }, failureBlock: { error in
             failureBlock(error)

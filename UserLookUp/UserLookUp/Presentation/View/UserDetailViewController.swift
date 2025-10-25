@@ -28,8 +28,8 @@ final class UserDetailViewController: UIViewController {
         control.selectedSegmentIndex = 0
         control.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
         
-        control.backgroundColor = UIColor.systemGray6.withAlphaComponent(0.3)
-        control.selectedSegmentTintColor = .white
+        control.backgroundColor = UIColor.systemGray5.withAlphaComponent(0.5)
+        control.selectedSegmentTintColor = UIColor.secondarySystemGroupedBackground
         control.layer.cornerRadius = 8
         control.layer.masksToBounds = true
         

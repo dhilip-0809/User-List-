@@ -34,8 +34,8 @@ public final class UsersListPresenter: UsersListPresenterContract {
         } else {
             filteredUsers = allUsers.filter {
                 $0.name.localizedCaseInsensitiveContains(query) ||
-                $0.username.localizedCaseInsensitiveContains(query) ||
-                $0.email.localizedCaseInsensitiveContains(query)
+                $0.username.localizedCaseInsensitiveContains(query)
+                // $0.email.localizedCaseInsensitiveContains(query)
             }
         }
         view?.showUsers(filteredUsers)

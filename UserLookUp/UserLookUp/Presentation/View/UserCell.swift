@@ -70,7 +70,6 @@ final class UserCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
-        configureAccessibility()
     }
     
     required init?(coder: NSCoder) {
@@ -151,11 +150,6 @@ final class UserCell: UITableViewCell {
         nameLabel.text = nil
         avatarLabel.text = nil
         avatarView.backgroundColor = nil
-    }
-    
-    private func configureAccessibility() {
-        isAccessibilityElement = true
-        accessibilityTraits = .button
     }
     
     override func layoutSubviews() {

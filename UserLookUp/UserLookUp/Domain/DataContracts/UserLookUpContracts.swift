@@ -61,7 +61,6 @@ public protocol UserPostsNetworkServiceContract {
     func fetchPosts(userId: Int, successBlock: @escaping ([Post]) -> Void, failureBlock: @escaping (UserPostsError) -> Void)
 }
 
-// MARK: - Error Types
 
 public enum UsersListErrorType {
     case networkUnavailable

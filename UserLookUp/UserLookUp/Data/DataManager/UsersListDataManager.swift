@@ -8,7 +8,6 @@
 
 import Foundation
 
-// MARK: - Users List Data Manager
 
 public final class UsersListDataManager: UsersListDataManagerContract {
     
@@ -20,7 +19,6 @@ public final class UsersListDataManager: UsersListDataManagerContract {
     
     public func fetchUsers(successBlock: @escaping ([User]) -> Void, failureBlock: @escaping (UsersListError) -> Void) {
         networkService.fetchUsers(successBlock: { users in
-            // Here you can add additional data processing, caching, etc.
             successBlock(users)
         }, failureBlock: { error in
             failureBlock(error)
