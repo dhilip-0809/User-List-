@@ -1,0 +1,24 @@
+// Navigation
+"users.title" = "Users";
+"users.search.placeholder" = "Search by name or username";
+
+// Welcome Screen
+"users.welcome.title" = "Find Users Instantly";
+"users.welcome.message" = "Start typing in the search bar above to find users by their username or email address";
+
+// No Results
+"users.noResults.title" = "No Results Found";
+"users.noResults.message" = "No users found. Try searching with a different name.";
+
+// Recent Searches
+"users.recent.header" = "RECENT SEARCHES";
+"users.recent.clearButton" = "Clear History";
+"users.recent.clearAlert.title" = "Clear Search History";
+"users.recent.clearAlert.message" = "Are you sure you want to clear all recent searches?";
+"users.recent.clearAlert.cancel" = "Cancel";
+"users.recent.clearAlert.confirm" = "Clear";
+"users.recent.delete" = "Delete";
+
+// Error
+"users.error.title" = "Error";
+"users.error.ok" = "OK";

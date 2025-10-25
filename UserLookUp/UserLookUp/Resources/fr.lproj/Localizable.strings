@@ -1,0 +1,55 @@
+/* 
+  Localizable.strings (French)
+  UserLookUp
+*/
+
+// MARK: - Common
+"common.ok" = "OK";
+"common.cancel" = "Annuler";
+"common.done" = "Terminé";
+"common.delete" = "Supprimer";
+"common.edit" = "Modifier";
+"common.save" = "Enregistrer";
+"common.close" = "Fermer";
+"common.search" = "Rechercher";
+"common.loading" = "Chargement...";
+"common.error" = "Erreur";
+"common.retry" = "Réessayer";
+
+// MARK: - Navigation
+"navigation.users" = "Utilisateurs";
+"navigation.back" = "Retour";
+
+// MARK: - Users List
+"users.title" = "Utilisateurs";
+"users.search.placeholder" = "Rechercher par nom ou nom d'utilisateur";
+"users.welcome.title" = "Trouvez des Utilisateurs Instantanément";
+"users.welcome.message" = "Commencez à taper dans la barre de recherche pour trouver des utilisateurs par leur nom ou adresse e-mail";
+"users.noResults.title" = "Aucun Résultat Trouvé";
+"users.noResults.message" = "Aucun utilisateur trouvé. Essayez de chercher avec un nom différent.";
+
+// MARK: - Recent Searches
+"users.recent.header" = "RECHERCHES RÉCENTES";
+"users.recent.clearButton" = "Effacer l'historique";
+"users.recent.clearAlert.title" = "Effacer l'historique de recherche";
+"users.recent.clearAlert.message" = "Êtes-vous sûr de vouloir effacer toutes les recherches récentes ?";
+"users.recent.clearAlert.cancel" = "Annuler";
+"users.recent.clearAlert.confirm" = "Effacer";
+"users.recent.delete" = "Supprimer";
+
+// MARK: - User Details
+"user.details.title" = "Détails de l'utilisateur";
+"user.details.name" = "Nom";
+"user.details.username" = "Nom d'utilisateur";
+"user.details.email" = "E-mail";
+"user.details.phone" = "Téléphone";
+"user.details.website" = "Site web";
+"user.details.company" = "Entreprise";
+"user.details.address" = "Adresse";
+
+// MARK: - Error Messages
+"error.general" = "Une erreur s'est produite. Veuillez réessayer.";
+"error.network" = "Erreur réseau. Veuillez vérifier votre connexion.";
+"error.noData" = "Aucune donnée disponible.";
+"error.invalidResponse" = "Réponse invalide du serveur.";
+"error.timeout" = "La requête a expiré. Veuillez réessayer.";

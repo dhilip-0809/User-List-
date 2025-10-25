@@ -11,7 +11,7 @@ final class UsersListViewController: UIViewController {
         let sc = UISearchController(searchResultsController: nil)
         sc.searchResultsUpdater = self
         sc.obscuresBackgroundDuringPresentation = false
-        sc.searchBar.placeholder = "Search by username or email"
+        sc.searchBar.placeholder = NSLocalizedString("users.search.placeholder", comment: "")
         sc.searchBar.delegate = self
         sc.searchBar.searchBarStyle = .minimal
         sc.searchBar.autocapitalizationType = .none
@@ -22,7 +22,7 @@ final class UsersListViewController: UIViewController {
     private let tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
         tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .systemBackground
+        tv.backgroundColor = ThemeManager.Colors.Background.primary
         tv.separatorStyle = .none
         tv.rowHeight = UITableView.automaticDimension
         tv.estimatedRowHeight = 80
@@ -34,7 +34,7 @@ final class UsersListViewController: UIViewController {
     private let firstLaunchEmptyView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = ThemeManager.Colors.Background.primary
         return view
     }()
     
@@ -51,7 +51,7 @@ final class UsersListViewController: UIViewController {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = .systemGray3
+        imageView.tintColor = ThemeManager.Colors.Icon.secondary
         let config = UIImage.SymbolConfiguration(pointSize: 70, weight: .light, scale: .large)
         imageView.image = UIImage(systemName: "person.text.rectangle", withConfiguration: config)
         return imageView
@@ -60,9 +60,9 @@ final class UsersListViewController: UIViewController {
     private let welcomeTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Find Users Instantly"
-        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
-        label.textColor = .label
+        label.text = NSLocalizedString("users.welcome.title", comment: "")
+        label.font = ThemeManager.Typography.largeTitleBold
+        label.textColor = ThemeManager.Colors.Text.primary
         label.textAlignment = .center
         return label
     }()
@@ -70,9 +70,9 @@ final class UsersListViewController: UIViewController {
     private let welcomeMessageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Start typing in the search bar above to find users by their username or email address"
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        label.textColor = .secondaryLabel
+        label.text = NSLocalizedString("users.welcome.message", comment: "")
+        label.font = ThemeManager.Typography.bodyRegular
+        label.textColor = ThemeManager.Colors.Text.secondary
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -81,7 +81,46 @@ final class UsersListViewController: UIViewController {
     private let noResultsEmptyView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = ThemeManager.Colors.Background.primary
+        view.isHidden = true
+        return view
+    }()
+    
+    private let noResultsImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = ThemeManager.Colors.Icon.secondary
+        let config = UIImage.SymbolConfiguration(pointSize: 72, weight: .light, scale: .large)
+        imageView.image = UIImage(systemName: "magnifyingglass.circle", withConfiguration: config)
+        return imageView
+    }()
+    
+    private let noResultsTitleLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = NSLocalizedString("users.noResults.title", comment: "")
+        label.font = ThemeManager.Typography.titleSemibold
+        label.textColor = ThemeManager.Colors.Text.primary
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private let noResultsMessageLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = NSLocalizedString("users.noResults.message", comment: "")
+        label.font = ThemeManager.Typography.smallRegular
+        label.textColor = ThemeManager.Colors.Text.secondary
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    private let recentSearchesView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = ThemeManager.Colors.Background.primary
         view.isHidden = true
         return view
     }()
@@ -95,58 +134,19 @@ final class UsersListViewController: UIViewController {
         return stack
     }()
     
-    private let noResultsImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = .systemGray3
-        let config = UIImage.SymbolConfiguration(pointSize: 72, weight: .light, scale: .large)
-        imageView.image = UIImage(systemName: "magnifyingglass.circle", withConfiguration: config)
-        return imageView
-    }()
-    
-    private let noResultsTitleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "No Results Found"
-        label.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
-        label.textColor = .label
-        label.textAlignment = .center
-        return label
-    }()
-    
-    private let noResultsMessageLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Try adjusting your search to find what you're looking for"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        label.textColor = .secondaryLabel
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    private let recentSearchesView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .systemBackground
-        view.isHidden = true
-        return view
-    }()
-    
     private let recentSearchesHeaderLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "RECENT SEARCHES"
-        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
-        label.textColor = .secondaryLabel
+        label.text = NSLocalizedString("users.recent.header", comment: "")
+        label.font = ThemeManager.Typography.captionSemibold
+        label.textColor = ThemeManager.Colors.Text.secondary
         return label
     }()
     
     private let recentSearchesTableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
         tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .systemBackground
+        tv.backgroundColor = ThemeManager.Colors.Background.primary
         tv.register(UITableViewCell.self, forCellReuseIdentifier: "recentCell")
         tv.rowHeight = 44
         tv.isScrollEnabled = false
@@ -156,8 +156,8 @@ final class UsersListViewController: UIViewController {
     private let clearHistoryButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Clear History", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        button.setTitle(NSLocalizedString("users.recent.clearButton", comment: ""), for: .normal)
+        button.titleLabel?.font = ThemeManager.Typography.buttonRegular
         return button
     }()
     
@@ -185,7 +185,7 @@ final class UsersListViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        title = "User Lookup"
+        title = NSLocalizedString("users.title", comment: "")
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
         navigationItem.searchController = searchController
@@ -193,19 +193,19 @@ final class UsersListViewController: UIViewController {
         
         let appearance = UINavigationBarAppearance()
         appearance.configureWithDefaultBackground()
-        appearance.backgroundColor = .systemBackground
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
-        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
+        appearance.backgroundColor = ThemeManager.Colors.Background.primary
+        appearance.titleTextAttributes = [.foregroundColor: ThemeManager.Colors.Text.primary]
+        appearance.largeTitleTextAttributes = [.foregroundColor: ThemeManager.Colors.Text.primary]
         
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.tintColor = UIColor(red: 0.0/255.0, green: 71.0/255.0, blue: 131.0/255.0, alpha: 1.0)
+        navigationController?.navigationBar.tintColor = ThemeManager.Colors.primary
         
         definesPresentationContext = true
     }
     
     private func setupUI() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = ThemeManager.Colors.Background.primary
         view.addSubview(firstLaunchEmptyView)
         view.addSubview(recentSearchesView)
         view.addSubview(tableView)
@@ -298,8 +298,13 @@ final class UsersListViewController: UIViewController {
     
     private func setupActivityIndicator() {
         activityIndicator.hidesWhenStopped = true
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(activityIndicator)
-        activityIndicator.center = view.center
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
+        ])
     }
     
     private func loadSearchHistory() {
@@ -345,12 +350,12 @@ final class UsersListViewController: UIViewController {
     
     @objc private func clearHistoryTapped() {
         let alert = UIAlertController(
-            title: "Clear Search History",
-            message: "Are you sure you want to clear all recent searches?",
+            title: NSLocalizedString("users.recent.clearAlert.title", comment: ""),
+            message: NSLocalizedString("users.recent.clearAlert.message", comment: ""),
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Clear", style: .destructive) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("users.recent.clearAlert.cancel", comment: ""), style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("users.recent.clearAlert.confirm", comment: ""), style: .destructive) { [weak self] _ in
             SearchHistoryManager.shared.clearHistory()
             self?.loadSearchHistory()
             self?.showInitialState()
@@ -402,7 +407,7 @@ extension UsersListViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "recentCell", for: indexPath)
             cell.textLabel?.text = searchHistory[indexPath.row]
             cell.imageView?.image = UIImage(systemName: "clock.arrow.circlepath")
-            cell.imageView?.tintColor = .systemGray
+            cell.imageView?.tintColor = ThemeManager.Colors.Icon.primary
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: UserCell.reuseIdentifier, for: indexPath) as? UserCell,
@@ -437,7 +442,7 @@ extension UsersListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         if tableView == recentSearchesTableView {
-            let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, completion in
+            let deleteAction = UIContextualAction(style: .destructive, title: NSLocalizedString("users.recent.delete", comment: "")) { [weak self] _, _, completion in
                 let searchTerm = self?.searchHistory[indexPath.row] ?? ""
                 SearchHistoryManager.shared.removeSearch(searchTerm)
                 self?.loadSearchHistory()
@@ -466,8 +471,12 @@ extension UsersListViewController: UsersListViewContract {
     }
     
     func showError(_ message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        let alert = UIAlertController(
+            title: NSLocalizedString("users.error.title", comment: ""),
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: NSLocalizedString("users.error.ok", comment: ""), style: .default))
         present(alert, animated: true)
     }
     

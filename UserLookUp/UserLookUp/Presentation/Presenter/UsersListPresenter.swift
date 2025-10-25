@@ -29,15 +29,28 @@ public final class UsersListPresenter: UsersListPresenterContract {
     }
     
     public func didSearchUsers(with query: String) {
-        if query.isEmpty {
+        guard !query.isEmpty else {
             filteredUsers = []
-        } else {
-            filteredUsers = allUsers.filter {
-                $0.name.localizedCaseInsensitiveContains(query) ||
-                $0.username.localizedCaseInsensitiveContains(query)
-                // $0.email.localizedCaseInsensitiveContains(query)
+            view?.showUsers(filteredUsers)
+            return
+        }
+        
+        let queryLower = query.lowercased()
+        var prefixMatches: [User] = []
+        var containsMatches: [User] = []
+        
+        for user in allUsers {
+            let name = user.name.lowercased()
+            let username = user.username.lowercased()
+            
+            if name.hasPrefix(queryLower) || username.hasPrefix(queryLower) {
+                prefixMatches.append(user)
+            } else if name.contains(queryLower) || username.contains(queryLower) {
+                containsMatches.append(user)
             }
         }
+        
+        filteredUsers = prefixMatches + containsMatches
         view?.showUsers(filteredUsers)
     }
     

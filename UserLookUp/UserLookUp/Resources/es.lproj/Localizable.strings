@@ -1,0 +1,34 @@
+/*
+  Localizable.strings
+  UserLookUp
+*/
+
+// Navigation
+"users.title" = "Usuarios";
+"back" = "Atrás";
+
+// Search
+"search.placeholder" = "Buscar por nombre o usuario";
+
+// Welcome Screen
+"welcome.title" = "Encuentra Usuarios al Instante";
+"welcome.message" = "Comienza a escribir en la barra de búsqueda para encontrar usuarios";
+
+// No Results
+"noResults.title" = "No Se Encontraron Resultados";
+"noResults.message" = "No se encontraron usuarios. Intenta buscar con un nombre diferente.";
+
+// Recent Searches
+"recent.header" = "BÚSQUEDAS RECIENTES";
+"recent.clearButton" = "Borrar Historial";
+"recent.clearTitle" = "Borrar Historial de Búsqueda";
+"recent.clearMessage" = "¿Estás seguro de que deseas borrar todas las búsquedas recientes?";
+"recent.cancel" = "Cancelar";
+"recent.confirm" = "Borrar";
+"recent.delete" = "Eliminar";
+
+// Error Messages
+"error.title" = "Error";
+"error.ok" = "Aceptar";
+"error.general" = "Algo salió mal. Por favor, inténtalo de nuevo.";
+"error.network" = "Error de red. Por favor, verifica tu conexión.";
