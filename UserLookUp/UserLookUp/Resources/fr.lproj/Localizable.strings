@@ -24,7 +24,7 @@
 "users.title" = "Utilisateurs";
 "users.search.placeholder" = "Rechercher par nom ou nom d'utilisateur";
 "users.welcome.title" = "Trouvez des Utilisateurs Instantanément";
-"users.welcome.message" = "Commencez à taper dans la barre de recherche pour trouver des utilisateurs par leur nom ou adresse e-mail";
+"users.welcome.message" = "Commencez à taper dans la barre de recherche ci-dessus pour trouver des utilisateurs par leur nom ou nom d'utilisateur";
 "users.noResults.title" = "Aucun Résultat Trouvé";
 "users.noResults.message" = "Aucun utilisateur trouvé. Essayez de chercher avec un nom différent.";
 

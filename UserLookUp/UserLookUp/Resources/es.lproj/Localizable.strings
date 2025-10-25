@@ -12,7 +12,7 @@
 
 // Welcome Screen
 "welcome.title" = "Encuentra Usuarios al Instante";
-"welcome.message" = "Comienza a escribir en la barra de búsqueda para encontrar usuarios";
+"welcome.message" = "Empieza a escribir en la barra de búsqueda arriba para encontrar usuarios por su nombre o nombre de usuario";
 
 // No Results
 "noResults.title" = "No Se Encontraron Resultados";

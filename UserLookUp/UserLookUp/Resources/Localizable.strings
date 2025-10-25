@@ -4,7 +4,7 @@
 
 // Welcome Screen
 "users.welcome.title" = "Find Users Instantly";
-"users.welcome.message" = "Start typing in the search bar above to find users by their username or email address";
+"users.welcome.message" = "Start typing in the search bar above to find users by their name or username";
 
 // No Results
 "users.noResults.title" = "No Results Found";
