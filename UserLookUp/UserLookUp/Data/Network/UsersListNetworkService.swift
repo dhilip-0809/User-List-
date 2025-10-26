@@ -15,29 +15,19 @@ public final class UsersListNetworkService: UsersListNetworkServiceContract {
         
         Task {
             do {
-                let (data, response) = try await URLSession.shared.data(from: url)
-                
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    failureBlock(UsersListError(type: .requestFailed, message: LocalizationManager.Error.Network.invalidResponse))
-                    return
-                }
-                
-                guard (200...299).contains(httpResponse.statusCode) else {
-                    failureBlock(UsersListError(type: .requestFailed, message: LocalizationManager.Error.Network.general))
-                    return
-                }
-                
-                let users = try JSONDecoder().decode([User].self, from: data)
+                let users: [User] = try await NetworkUtility.fetch(from: url)
                 successBlock(users)
-                
-            } catch URLError.notConnectedToInternet {
-                failureBlock(UsersListError(type: .networkUnavailable, message: LocalizationManager.Error.Network.noConnection))
-            } catch URLError.timedOut {
-                failureBlock(UsersListError(type: .timeout, message: LocalizationManager.Error.Network.timeout))
-            } catch is DecodingError {
-                failureBlock(UsersListError(type: .decodingFailed, message: LocalizationManager.Error.Users.processingFailed))
             } catch {
-                failureBlock(UsersListError(type: .unknown, message: LocalizationManager.Error.general))
+                let (errorType, message) = NetworkUtility.mapError(error)
+                let usersErrorType: UsersListErrorType
+                switch errorType {
+                    case .requestFailed: usersErrorType = .requestFailed
+                    case .networkUnavailable: usersErrorType = .networkUnavailable
+                    case .timeout: usersErrorType = .timeout
+                    case .decodingFailed: usersErrorType = .decodingFailed
+                    case .unknown: usersErrorType = .unknown
+                }
+                failureBlock(UsersListError(type: usersErrorType, message: message))
             }
         }
     }
