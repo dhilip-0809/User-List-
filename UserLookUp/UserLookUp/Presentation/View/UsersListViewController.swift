@@ -27,7 +27,7 @@ final class UsersListViewController: UIViewController {
         tv.rowHeight = UITableView.automaticDimension
         tv.estimatedRowHeight = 80
         tv.showsVerticalScrollIndicator = true
-        tv.keyboardDismissMode = .onDrag
+        tv.keyboardDismissMode = .interactive
         return tv
     }()
     
@@ -170,6 +170,7 @@ final class UsersListViewController: UIViewController {
         setupTableViews()
         setupActivityIndicator()
         setupEmptyStates()
+        setupKeyboardHandling()
         loadSearchHistory()
         showInitialState()
         presenter?.viewDidLoad()
@@ -181,6 +182,51 @@ final class UsersListViewController: UIViewController {
         
         if let searchText = searchController.searchBar.text, !searchText.isEmpty {
             presenter?.didSearchUsers(with: searchText)
+        }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    private func setupKeyboardHandling() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+        searchController.searchBar.resignFirstResponder()
+    }
+    
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+              let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else { return }
+        
+        let keyboardHeight = keyboardFrame.height - view.safeAreaInsets.bottom
+        
+        UIView.animate(withDuration: duration) {
+            self.tableView.contentInset.bottom = keyboardHeight
+            self.tableView.verticalScrollIndicatorInsets.bottom = keyboardHeight
+            self.recentSearchesTableView.contentInset.bottom = keyboardHeight
+            self.recentSearchesTableView.verticalScrollIndicatorInsets.bottom = keyboardHeight
+            self.firstLaunchEmptyView.transform = CGAffineTransform(translationX: 0, y: -keyboardHeight / 2)
+        }
+    }
+    
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        guard let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else { return }
+        
+        UIView.animate(withDuration: duration) {
+            self.tableView.contentInset.bottom = 0
+            self.tableView.verticalScrollIndicatorInsets.bottom = 0
+            self.recentSearchesTableView.contentInset.bottom = 0
+            self.recentSearchesTableView.verticalScrollIndicatorInsets.bottom = 0
+            self.firstLaunchEmptyView.transform = .identity
         }
     }
     
