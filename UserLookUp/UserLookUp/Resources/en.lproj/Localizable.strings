@@ -36,10 +36,19 @@
 "users.recent.delete" = "Delete";
 
 // Error Messages
+"users.error.title" = "Error";
+"users.error.ok" = "OK";
 "error.title" = "Error";
 "error.ok" = "OK";
 "error.general" = "Something went wrong. Please try again.";
 "error.network" = "Network error. Please check your connection.";
+"error.network.noConnection" = "No internet connection. Please check your network.";
+"error.network.timeout" = "Request timed out. Please try again.";
+"error.invalidResponse" = "Invalid response from server.";
+"error.posts.loadFailed" = "Failed to load posts.";
+"error.posts.processingFailed" = "Failed to process posts data.";
+"error.users.loadFailed" = "Failed to load users.";
+"error.users.processingFailed" = "Failed to process users data.";
 
 // User Details
 "user.details.title" = "User Details";

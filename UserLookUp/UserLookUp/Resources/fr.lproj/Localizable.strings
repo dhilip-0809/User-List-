@@ -50,10 +50,16 @@
 "user.details.noPosts" = "Aucune publication disponible";
 
 // MARK: - Error Messages
+"users.error.title" = "Erreur";
+"users.error.ok" = "OK";
+"error.title" = "Erreur";
+"error.ok" = "OK";
 "error.general" = "Une erreur s'est produite. Veuillez réessayer.";
-"error.network.noConnection" = "Pas de connexion Internet";
-"error.network.timeout" = "La requête a expiré";
-"error.network.general" = "Erreur réseau. Veuillez vérifier votre connexion.";
-"error.invalidResponse" = "Réponse invalide du serveur";
-"error.posts.loadFailed" = "Échec du chargement des publications";
-"error.posts.processingFailed" = "Échec du traitement des publications";
+"error.network" = "Erreur réseau. Veuillez vérifier votre connexion.";
+"error.network.noConnection" = "Pas de connexion Internet. Vérifiez votre réseau.";
+"error.network.timeout" = "La requête a expiré. Veuillez réessayer.";
+"error.invalidResponse" = "Réponse invalide du serveur.";
+"error.posts.loadFailed" = "Échec du chargement des publications.";
+"error.posts.processingFailed" = "Échec du traitement des données de publications.";
+"error.users.loadFailed" = "Échec du chargement des utilisateurs.";
+"error.users.processingFailed" = "Échec du traitement des données d'utilisateurs.";

@@ -38,8 +38,17 @@
 // Error Messages
 "users.error.title" = "Error";
 "users.error.ok" = "Aceptar";
-"users.error.general" = "Algo salió mal. Por favor, inténtalo de nuevo.";
-"users.error.network" = "Error de red. Por favor, verifica tu conexión.";
+"error.title" = "Error";
+"error.ok" = "Aceptar";
+"error.general" = "Algo salió mal. Por favor, inténtalo de nuevo.";
+"error.network" = "Error de red. Por favor, verifica tu conexión.";
+"error.network.noConnection" = "Sin conexión a internet. Verifica tu red.";
+"error.network.timeout" = "Tiempo de espera agotado. Inténtalo de nuevo.";
+"error.invalidResponse" = "Respuesta inválida del servidor.";
+"error.posts.loadFailed" = "Error al cargar publicaciones.";
+"error.posts.processingFailed" = "Error al procesar datos de publicaciones.";
+"error.users.loadFailed" = "Error al cargar usuarios.";
+"error.users.processingFailed" = "Error al procesar datos de usuarios.";
 
 // User Details
 "user.details.title" = "Detalles del Usuario";
