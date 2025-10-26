@@ -78,7 +78,7 @@ public final class UsersListPresenter: UsersListPresenterContract {
         }, failureBlock: { [weak self] error in
             DispatchQueue.main.async {
                 self?.view?.hideLoading()
-                self?.view?.showError(self?.errorMessage(for: error) ?? "An error occurred")
+                self?.view?.showError(self?.errorMessage(for: error) ?? LocalizationManager.Error.general)
             }
         })
     }
@@ -86,15 +86,15 @@ public final class UsersListPresenter: UsersListPresenterContract {
     private func errorMessage(for error: UsersListError) -> String {
         switch error.type {
         case .networkUnavailable:
-            return "No internet connection. Please check your network."
+            return LocalizationManager.Error.Network.noConnection
         case .timeout:
-            return "Request timed out. Please try again."
+            return LocalizationManager.Error.Network.timeout
         case .decodingFailed:
-            return "Failed to process data from server."
+            return LocalizationManager.Error.Users.processingFailed
         case .requestFailed:
-            return error.message ?? "Request failed. Please try again."
+            return error.message ?? LocalizationManager.Error.Users.loadFailed
         case .unknown:
-            return error.message ?? "Something went wrong. Please try again."
+            return error.message ?? LocalizationManager.Error.general
         }
     }
 }

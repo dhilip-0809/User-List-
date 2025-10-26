@@ -17,7 +17,7 @@ public final class UserPostsNetworkService: UserPostsNetworkServiceContract {
     
     public func fetchPosts(userId: Int, successBlock: @escaping ([Post]) -> Void, failureBlock: @escaping (UserPostsError) -> Void) {
         guard let url = URL(string: "\(baseURL)/posts?userId=\(userId)") else {
-            failureBlock(UserPostsError(type: .requestFailed, message: "Invalid URL"))
+            failureBlock(UserPostsError(type: .requestFailed, message: LocalizationManager.Error.Network.invalidResponse))
             return
         }
         
@@ -26,12 +26,12 @@ public final class UserPostsNetworkService: UserPostsNetworkServiceContract {
                 let (data, response) = try await URLSession.shared.data(from: url)
                 
                 guard let httpResponse = response as? HTTPURLResponse else {
-                    failureBlock(UserPostsError(type: .requestFailed, message: "Invalid response"))
+                    failureBlock(UserPostsError(type: .requestFailed, message: LocalizationManager.Error.Network.invalidResponse))
                     return
                 }
                 
                 guard (200...299).contains(httpResponse.statusCode) else {
-                    failureBlock(UserPostsError(type: .requestFailed, message: "HTTP \(httpResponse.statusCode)"))
+                    failureBlock(UserPostsError(type: .requestFailed, message: LocalizationManager.Error.Network.general))
                     return
                 }
                 
@@ -39,13 +39,13 @@ public final class UserPostsNetworkService: UserPostsNetworkServiceContract {
                 successBlock(posts)
                 
             } catch URLError.notConnectedToInternet {
-                failureBlock(UserPostsError(type: .networkUnavailable, message: "No internet connection"))
+                failureBlock(UserPostsError(type: .networkUnavailable, message: LocalizationManager.Error.Network.noConnection))
             } catch URLError.timedOut {
-                failureBlock(UserPostsError(type: .timeout, message: "Request timed out"))
+                failureBlock(UserPostsError(type: .timeout, message: LocalizationManager.Error.Network.timeout))
             } catch is DecodingError {
-                failureBlock(UserPostsError(type: .decodingFailed, message: "Failed to decode response"))
+                failureBlock(UserPostsError(type: .decodingFailed, message: LocalizationManager.Error.Posts.processingFailed))
             } catch {
-                failureBlock(UserPostsError(type: .unknown, message: error.localizedDescription))
+                failureBlock(UserPostsError(type: .unknown, message: LocalizationManager.Error.general))
             }
         }
     }

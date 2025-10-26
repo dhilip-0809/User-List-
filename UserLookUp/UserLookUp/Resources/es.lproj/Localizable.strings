@@ -5,47 +5,54 @@
 
 // Common
 "common.ok" = "Aceptar";
-"common.cancel" = "Cancelar";
-"common.done" = "Listo";
-"common.delete" = "Eliminar";
-"common.edit" = "Editar";
-"common.save" = "Guardar";
-"common.close" = "Cerrar";
-"common.search" = "Buscar";
-"common.loading" = "Cargando...";
 "common.error" = "Error";
-"common.retry" = "Reintentar";
 
 // Navigation
 "navigation.users" = "Usuarios";
 "navigation.back" = "Atrás";
 
 // Users
-"users.title" = "Búsqueda de usuarios";
-"back" = "Atrás";
+"users.title" = "Consulta de Usuarios";
+"navigation.back" = "Atrás";
 
 // Search
-"search.placeholder" = "Buscar por nombre o usuario";
+"users.search.placeholder" = "Buscar por nombre o usuario";
 
 // Welcome Screen
-"welcome.title" = "Encuentra Usuarios al Instante";
-"welcome.message" = "Empieza a escribir en la barra de búsqueda arriba para encontrar usuarios por su nombre o nombre de usuario";
+"users.welcome.title" = "Encuentra Usuarios al Instante";
+"users.welcome.message" = "Empieza a escribir en la barra de búsqueda arriba para encontrar usuarios por su nombre o nombre de usuario";
 
 // No Results
 "noResults.title" = "No Se Encontraron Resultados";
 "noResults.message" = "No se encontraron usuarios. Intenta buscar con un nombre diferente.";
 
 // Recent Searches
-"recent.header" = "BÚSQUEDAS RECIENTES";
-"recent.clearButton" = "Borrar Historial";
-"recent.clearTitle" = "Borrar Historial de Búsqueda";
-"recent.clearMessage" = "¿Estás seguro de que deseas borrar todas las búsquedas recientes?";
-"recent.cancel" = "Cancelar";
-"recent.confirm" = "Borrar";
-"recent.delete" = "Eliminar";
+"users.recent.header" = "BÚSQUEDAS RECIENTES";
+"users.recent.clearButton" = "Borrar Historial";
+"users.recent.clearAlert.title" = "Borrar Historial de Búsqueda";
+"users.recent.clearAlert.message" = "¿Estás seguro de que deseas borrar todas las búsquedas recientes?";
+"users.recent.clearAlert.cancel" = "Cancelar";
+"users.recent.clearAlert.confirm" = "Borrar";
+"users.recent.delete" = "Eliminar";
 
 // Error Messages
-"error.title" = "Error";
-"error.ok" = "Aceptar";
-"error.general" = "Algo salió mal. Por favor, inténtalo de nuevo.";
-"error.network" = "Error de red. Por favor, verifica tu conexión.";
+"users.error.title" = "Error";
+"users.error.ok" = "Aceptar";
+"users.error.general" = "Algo salió mal. Por favor, inténtalo de nuevo.";
+"users.error.network" = "Error de red. Por favor, verifica tu conexión.";
+
+// User Details
+"user.details.title" = "Detalles del Usuario";
+"user.details.name" = "Nombre";
+"user.details.username" = "Nombre de Usuario";
+"user.details.email" = "Correo Electrónico";
+"user.details.phone" = "Teléfono";
+"user.details.website" = "Sitio Web";
+"user.details.company" = "Compañía";
+"user.details.address" = "Dirección";
+"user.details.sections.contact" = "Información de Contacto";
+"user.details.sections.address" = "Dirección";
+"user.details.sections.company" = "Compañía";
+"user.details.tab.details" = "Detalles de %@";
+"user.details.tab.posts" = "Publicaciones de %@";
+"user.details.noPosts" = "No hay publicaciones disponibles";

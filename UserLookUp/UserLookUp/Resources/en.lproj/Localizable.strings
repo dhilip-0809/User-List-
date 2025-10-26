@@ -5,47 +5,54 @@
 
 // Common
 "common.ok" = "OK";
-"common.cancel" = "Cancel";
-"common.done" = "Done";
-"common.delete" = "Delete";
-"common.edit" = "Edit";
-"common.save" = "Save";
-"common.close" = "Close";
-"common.search" = "Search";
-"common.loading" = "Loading...";
 "common.error" = "Error";
-"common.retry" = "Retry";
 
 // Navigation
 "navigation.users" = "Users";
 "navigation.back" = "Back";
 
 // Users
-"users.title" = "User Search";
-"back" = "Back";
+"users.title" = "User Lookup";
+"navigation.back" = "Back";
 
 // Search
-"search.placeholder" = "Search by name or username";
+"users.search.placeholder" = "Search by name or username";
 
 // Welcome Screen
-"welcome.title" = "Find Users Instantly";
-"welcome.message" = "Start typing in the search bar above to find users by their name or username";
+"users.welcome.title" = "Find Users Instantly";
+"users.welcome.message" = "Start typing in the search bar above to find users by their name or username";
 
 // No Results
 "noResults.title" = "No Results Found";
 "noResults.message" = "No users found. Try searching with a different name.";
 
 // Recent Searches
-"recent.header" = "RECENT SEARCHES";
-"recent.clearButton" = "Clear History";
-"recent.clearTitle" = "Clear Search History";
-"recent.clearMessage" = "Are you sure you want to clear all recent searches?";
-"recent.cancel" = "Cancel";
-"recent.confirm" = "Clear";
-"recent.delete" = "Delete";
+"users.recent.header" = "RECENT SEARCHES";
+"users.recent.clearButton" = "Clear History";
+"users.recent.clearAlert.title" = "Clear Search History";
+"users.recent.clearAlert.message" = "Are you sure you want to clear all recent searches?";
+"users.recent.clearAlert.cancel" = "Cancel";
+"users.recent.clearAlert.confirm" = "Clear";
+"users.recent.delete" = "Delete";
 
 // Error Messages
 "error.title" = "Error";
 "error.ok" = "OK";
 "error.general" = "Something went wrong. Please try again.";
 "error.network" = "Network error. Please check your connection.";
+
+// User Details
+"user.details.title" = "User Details";
+"user.details.name" = "Name";
+"user.details.username" = "Username";
+"user.details.email" = "Email";
+"user.details.phone" = "Phone";
+"user.details.website" = "Website";
+"user.details.company" = "Company";
+"user.details.address" = "Address";
+"user.details.sections.contact" = "Contact Information";
+"user.details.sections.address" = "Address";
+"user.details.sections.company" = "Company";
+"user.details.tab.details" = "%@'s Details";
+"user.details.tab.posts" = "%@'s Posts";
+"user.details.noPosts" = "No posts available";

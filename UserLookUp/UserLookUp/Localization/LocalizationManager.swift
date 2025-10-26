@@ -3,16 +3,7 @@ import Foundation
 enum LocalizationManager {
     enum Common {
         static var ok: String { NSLocalizedString("common.ok", comment: "OK button title") }
-        static var cancel: String { NSLocalizedString("common.cancel", comment: "Cancel button title") }
-        static var done: String { NSLocalizedString("common.done", comment: "Done button title") }
-        static var delete: String { NSLocalizedString("common.delete", comment: "Delete button title") }
-        static var edit: String { NSLocalizedString("common.edit", comment: "Edit button title") }
-        static var save: String { NSLocalizedString("common.save", comment: "Save button title") }
-        static var close: String { NSLocalizedString("common.close", comment: "Close button title") }
-        static var search: String { NSLocalizedString("common.search", comment: "Search button title") }
-        static var loading: String { NSLocalizedString("common.loading", comment: "Loading indicator text") }
         static var error: String { NSLocalizedString("common.error", comment: "Error title") }
-        static var retry: String { NSLocalizedString("common.retry", comment: "Retry button title") }
     }
     
     enum Navigation {
@@ -90,6 +81,8 @@ enum LocalizationManager {
     }
     
     enum Error {
+        static var general: String { NSLocalizedString("error.general", comment: "General error message") }
+        
         enum Network {
             static var noConnection: String { NSLocalizedString("error.network.noConnection", comment: "No internet connection error message") }
             static var timeout: String { NSLocalizedString("error.network.timeout", comment: "Request timeout error message") }
@@ -100,6 +93,11 @@ enum LocalizationManager {
         enum Posts {
             static var loadFailed: String { NSLocalizedString("error.posts.loadFailed", comment: "Failed to load posts error message") }
             static var processingFailed: String { NSLocalizedString("error.posts.processingFailed", comment: "Failed to process posts error message") }
+        }
+        
+        enum Users {
+            static var loadFailed: String { NSLocalizedString("error.users.loadFailed", comment: "Failed to load users error message") }
+            static var processingFailed: String { NSLocalizedString("error.users.processingFailed", comment: "Failed to process users error message") }
         }
     }
 }

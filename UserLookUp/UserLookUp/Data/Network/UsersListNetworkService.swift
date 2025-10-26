@@ -9,7 +9,7 @@ public final class UsersListNetworkService: UsersListNetworkServiceContract {
     
     public func fetchUsers(successBlock: @escaping ([User]) -> Void, failureBlock: @escaping (UsersListError) -> Void) {
         guard let url = URL(string: "\(baseURL)/users") else {
-            failureBlock(UsersListError(type: .requestFailed, message: "Invalid URL"))
+            failureBlock(UsersListError(type: .requestFailed, message: LocalizationManager.Error.Network.invalidResponse))
             return
         }
         
@@ -18,12 +18,12 @@ public final class UsersListNetworkService: UsersListNetworkServiceContract {
                 let (data, response) = try await URLSession.shared.data(from: url)
                 
                 guard let httpResponse = response as? HTTPURLResponse else {
-                    failureBlock(UsersListError(type: .requestFailed, message: "Invalid response"))
+                    failureBlock(UsersListError(type: .requestFailed, message: LocalizationManager.Error.Network.invalidResponse))
                     return
                 }
                 
                 guard (200...299).contains(httpResponse.statusCode) else {
-                    failureBlock(UsersListError(type: .requestFailed, message: "HTTP \(httpResponse.statusCode)"))
+                    failureBlock(UsersListError(type: .requestFailed, message: LocalizationManager.Error.Network.general))
                     return
                 }
                 
@@ -31,13 +31,13 @@ public final class UsersListNetworkService: UsersListNetworkServiceContract {
                 successBlock(users)
                 
             } catch URLError.notConnectedToInternet {
-                failureBlock(UsersListError(type: .networkUnavailable, message: "No internet connection"))
+                failureBlock(UsersListError(type: .networkUnavailable, message: LocalizationManager.Error.Network.noConnection))
             } catch URLError.timedOut {
-                failureBlock(UsersListError(type: .timeout, message: "Request timed out"))
+                failureBlock(UsersListError(type: .timeout, message: LocalizationManager.Error.Network.timeout))
             } catch is DecodingError {
-                failureBlock(UsersListError(type: .decodingFailed, message: "Failed to decode response"))
+                failureBlock(UsersListError(type: .decodingFailed, message: LocalizationManager.Error.Users.processingFailed))
             } catch {
-                failureBlock(UsersListError(type: .unknown, message: error.localizedDescription))
+                failureBlock(UsersListError(type: .unknown, message: LocalizationManager.Error.general))
             }
         }
     }
