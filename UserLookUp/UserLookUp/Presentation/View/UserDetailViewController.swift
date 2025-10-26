@@ -23,7 +23,10 @@ final class UserDetailViewController: UIViewController {
     
     private lazy var segmentedControl: UISegmentedControl = {
         let firstName = user.name.components(separatedBy: " ").first ?? user.name
-        let control = UISegmentedControl(items: ["\(firstName)'s Details", "\(firstName)'s Posts"])
+        let control = UISegmentedControl(items: [
+            LocalizationManager.Users.UserDetails.detailsTab(name: firstName),
+            LocalizationManager.Users.UserDetails.postsTab(name: firstName)
+        ])
         control.translatesAutoresizingMaskIntoConstraints = false
         control.selectedSegmentIndex = 0
         control.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
@@ -83,7 +86,7 @@ final class UserDetailViewController: UIViewController {
     private let postsEmptyLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "No Posts Available"
+        label.text = LocalizationManager.Users.UserDetails.noPosts
         label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         label.textColor = .secondaryLabel
         label.textAlignment = .center
@@ -116,7 +119,7 @@ final class UserDetailViewController: UIViewController {
     private func setupNavigationBar() {
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.tintColor = UIColor(red: 0.0/255.0, green: 71.0/255.0, blue: 131.0/255.0, alpha: 1.0)
-        navigationItem.backButtonTitle = "Back"
+        navigationItem.backButtonTitle = LocalizationManager.Navigation.back
     }
     
     private func setupUI() {
@@ -217,9 +220,9 @@ extension UserDetailViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if currentTab == .details {
             switch DetailsSection(rawValue: section)! {
-            case .contact: return "CONTACT"
-            case .address: return "ADDRESS"
-            case .company: return "COMPANY"
+            case .contact: return LocalizationManager.Users.UserDetails.Contact.header
+            case .address: return LocalizationManager.Users.UserDetails.Address.header
+            case .company: return LocalizationManager.Users.UserDetails.Company.header
             }
         } else {
             return posts.isEmpty ? nil : "POSTS"
@@ -268,19 +271,19 @@ extension UserDetailViewController: UITableViewDataSource, UITableViewDelegate {
                 let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
                 cfg.image = UIImage(systemName: "envelope.fill", withConfiguration: symbolConfig)
                 cfg.imageProperties.tintColor = UIColor(red: 0.0/255.0, green: 71.0/255.0, blue: 131.0/255.0, alpha: 1.0)
-                cfg.text = "Email"
+                cfg.text = LocalizationManager.Users.UserDetails.email
                 cfg.secondaryText = user.email
             case 1:
                 let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
                 cfg.image = UIImage(systemName: "phone.fill", withConfiguration: symbolConfig)
                 cfg.imageProperties.tintColor = .systemGreen
-                cfg.text = "Phone"
+                cfg.text = LocalizationManager.Users.UserDetails.phone
                 cfg.secondaryText = user.phone
             case 2:
                 let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
                 cfg.image = UIImage(systemName: "globe", withConfiguration: symbolConfig)
                 cfg.imageProperties.tintColor = .systemOrange
-                cfg.text = "Website"
+                cfg.text = LocalizationManager.Users.UserDetails.website
                 cfg.secondaryText = user.website
             default: break
             }
@@ -379,8 +382,8 @@ extension UserDetailViewController: UserPostsViewContract {
     }
     
     func showError(_ message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        let alert = UIAlertController(title: LocalizationManager.Common.error, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: LocalizationManager.Common.ok, style: .default))
         present(alert, animated: true)
     }
     

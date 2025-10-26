@@ -52,7 +52,7 @@ public final class UserPostsPresenter: UserPostsPresenterContract {
         }, failureBlock: { [weak self] error in
             DispatchQueue.main.async {
                 self?.view?.hideLoading()
-                self?.view?.showError(self?.errorMessage(for: error) ?? "Failed to load posts")
+                self?.view?.showError(self?.errorMessage(for: error) ?? LocalizationManager.Error.Posts.loadFailed)
             }
         })
     }
@@ -60,15 +60,15 @@ public final class UserPostsPresenter: UserPostsPresenterContract {
     private func errorMessage(for error: UserPostsError) -> String {
         switch error.type {
         case .networkUnavailable:
-            return "No internet connection"
+            return LocalizationManager.Error.Network.noConnection
         case .timeout:
-            return "Request timed out"
+            return LocalizationManager.Error.Network.timeout
         case .decodingFailed:
-            return "Failed to process posts"
+            return LocalizationManager.Error.Posts.processingFailed
         case .requestFailed:
-            return error.message ?? "Failed to load posts"
+            return error.message ?? LocalizationManager.Error.Posts.loadFailed
         case .unknown:
-            return error.message ?? "Something went wrong"
+            return error.message ?? LocalizationManager.Error.general
         }
     }
 }

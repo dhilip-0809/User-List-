@@ -11,7 +11,7 @@ final class UsersListViewController: UIViewController {
         let sc = UISearchController(searchResultsController: nil)
         sc.searchResultsUpdater = self
         sc.obscuresBackgroundDuringPresentation = false
-        sc.searchBar.placeholder = NSLocalizedString("users.search.placeholder", comment: "")
+        sc.searchBar.placeholder = LocalizationManager.Users.Search.placeholder
         sc.searchBar.delegate = self
         sc.searchBar.searchBarStyle = .minimal
         sc.searchBar.autocapitalizationType = .none
@@ -60,7 +60,7 @@ final class UsersListViewController: UIViewController {
     private let welcomeTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = NSLocalizedString("users.welcome.title", comment: "")
+        label.text = LocalizationManager.Users.Welcome.title
         label.font = ThemeManager.Typography.largeTitleBold
         label.textColor = ThemeManager.Colors.Text.primary
         label.textAlignment = .center
@@ -70,7 +70,7 @@ final class UsersListViewController: UIViewController {
     private let welcomeMessageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = NSLocalizedString("users.welcome.message", comment: "")
+        label.text = LocalizationManager.Users.Welcome.message
         label.font = ThemeManager.Typography.bodyRegular
         label.textColor = ThemeManager.Colors.Text.secondary
         label.textAlignment = .center
@@ -99,7 +99,7 @@ final class UsersListViewController: UIViewController {
     private let noResultsTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = NSLocalizedString("users.noResults.title", comment: "")
+        label.text = LocalizationManager.Users.NoResults.title
         label.font = ThemeManager.Typography.titleSemibold
         label.textColor = ThemeManager.Colors.Text.primary
         label.textAlignment = .center
@@ -109,7 +109,7 @@ final class UsersListViewController: UIViewController {
     private let noResultsMessageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = NSLocalizedString("users.noResults.message", comment: "")
+        label.text = LocalizationManager.Users.NoResults.message
         label.font = ThemeManager.Typography.smallRegular
         label.textColor = ThemeManager.Colors.Text.secondary
         label.textAlignment = .center
@@ -137,7 +137,7 @@ final class UsersListViewController: UIViewController {
     private let recentSearchesHeaderLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = NSLocalizedString("users.recent.header", comment: "")
+        label.text = LocalizationManager.Users.Recent.header
         label.font = ThemeManager.Typography.captionSemibold
         label.textColor = ThemeManager.Colors.Text.secondary
         return label
@@ -156,7 +156,7 @@ final class UsersListViewController: UIViewController {
     private let clearHistoryButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(NSLocalizedString("users.recent.clearButton", comment: ""), for: .normal)
+        button.setTitle(LocalizationManager.Users.Recent.clearButton, for: .normal)
         button.titleLabel?.font = ThemeManager.Typography.buttonRegular
         return button
     }()
@@ -185,7 +185,7 @@ final class UsersListViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        title = NSLocalizedString("users.title", comment: "")
+        title = LocalizationManager.Users.title
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
         navigationItem.searchController = searchController
@@ -350,12 +350,12 @@ final class UsersListViewController: UIViewController {
     
     @objc private func clearHistoryTapped() {
         let alert = UIAlertController(
-            title: NSLocalizedString("users.recent.clearAlert.title", comment: ""),
-            message: NSLocalizedString("users.recent.clearAlert.message", comment: ""),
+            title: LocalizationManager.Users.Recent.ClearAlert.title,
+            message: LocalizationManager.Users.Recent.ClearAlert.message,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: NSLocalizedString("users.recent.clearAlert.cancel", comment: ""), style: .cancel))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("users.recent.clearAlert.confirm", comment: ""), style: .destructive) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: LocalizationManager.Users.Recent.ClearAlert.cancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: LocalizationManager.Users.Recent.ClearAlert.confirm, style: .destructive) { [weak self] _ in
             SearchHistoryManager.shared.clearHistory()
             self?.loadSearchHistory()
             self?.showInitialState()
@@ -442,7 +442,7 @@ extension UsersListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         if tableView == recentSearchesTableView {
-            let deleteAction = UIContextualAction(style: .destructive, title: NSLocalizedString("users.recent.delete", comment: "")) { [weak self] _, _, completion in
+            let deleteAction = UIContextualAction(style: .destructive, title: LocalizationManager.Users.Recent.delete) { [weak self] _, _, completion in
                 let searchTerm = self?.searchHistory[indexPath.row] ?? ""
                 SearchHistoryManager.shared.removeSearch(searchTerm)
                 self?.loadSearchHistory()
@@ -472,11 +472,11 @@ extension UsersListViewController: UsersListViewContract {
     
     func showError(_ message: String) {
         let alert = UIAlertController(
-            title: NSLocalizedString("users.error.title", comment: ""),
+            title: LocalizationManager.Users.Error.title,
             message: message,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: NSLocalizedString("users.error.ok", comment: ""), style: .default))
+        alert.addAction(UIAlertAction(title: LocalizationManager.Users.Error.ok, style: .default))
         present(alert, animated: true)
     }
     

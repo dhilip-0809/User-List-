@@ -3,7 +3,12 @@
   UserLookUp
 */
 
-// MARK: - Common
+// MARK: - Navigation
+"navigation.users" = "Utilisateurs";
+"navigation.back" = "Retour";
+
+// MARK: - Users List
+// Common
 "common.ok" = "OK";
 "common.cancel" = "Annuler";
 "common.done" = "Terminé";
@@ -16,12 +21,12 @@
 "common.error" = "Erreur";
 "common.retry" = "Réessayer";
 
-// MARK: - Navigation
+// Navigation
 "navigation.users" = "Utilisateurs";
 "navigation.back" = "Retour";
 
-// MARK: - Users List
-"users.title" = "Utilisateurs";
+// Users
+"users.title" = "Recherche d'utilisateurs";
 "users.search.placeholder" = "Rechercher par nom ou nom d'utilisateur";
 "users.welcome.title" = "Trouvez des Utilisateurs Instantanément";
 "users.welcome.message" = "Commencez à taper dans la barre de recherche ci-dessus pour trouver des utilisateurs par leur nom ou nom d'utilisateur";
@@ -39,6 +44,14 @@
 
 // MARK: - User Details
 "user.details.title" = "Détails de l'utilisateur";
+"user.details.tab.details" = "Détails de %@";
+"user.details.tab.posts" = "Publications de %@";
+"user.details.noPosts" = "Aucune Publication Disponible";
+
+// User Details Sections
+"user.details.sections.contact" = "CONTACT";
+"user.details.sections.address" = "ADRESSE";
+"user.details.sections.company" = "ENTREPRISE";
 "user.details.name" = "Nom";
 "user.details.username" = "Nom d'utilisateur";
 "user.details.email" = "E-mail";
@@ -49,7 +62,9 @@
 
 // MARK: - Error Messages
 "error.general" = "Une erreur s'est produite. Veuillez réessayer.";
-"error.network" = "Erreur réseau. Veuillez vérifier votre connexion.";
-"error.noData" = "Aucune donnée disponible.";
-"error.invalidResponse" = "Réponse invalide du serveur.";
-"error.timeout" = "La requête a expiré. Veuillez réessayer.";
+"error.network.noConnection" = "Pas de connexion Internet";
+"error.network.timeout" = "La requête a expiré";
+"error.network.general" = "Erreur réseau. Veuillez vérifier votre connexion.";
+"error.invalidResponse" = "Réponse invalide du serveur";
+"error.posts.loadFailed" = "Échec du chargement des publications";
+"error.posts.processingFailed" = "Échec du traitement des publications";

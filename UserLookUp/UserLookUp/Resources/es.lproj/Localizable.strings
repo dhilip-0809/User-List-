@@ -3,8 +3,25 @@
   UserLookUp
 */
 
+// Common
+"common.ok" = "Aceptar";
+"common.cancel" = "Cancelar";
+"common.done" = "Listo";
+"common.delete" = "Eliminar";
+"common.edit" = "Editar";
+"common.save" = "Guardar";
+"common.close" = "Cerrar";
+"common.search" = "Buscar";
+"common.loading" = "Cargando...";
+"common.error" = "Error";
+"common.retry" = "Reintentar";
+
 // Navigation
-"users.title" = "Usuarios";
+"navigation.users" = "Usuarios";
+"navigation.back" = "Atrás";
+
+// Users
+"users.title" = "Búsqueda de usuarios";
 "back" = "Atrás";
 
 // Search
