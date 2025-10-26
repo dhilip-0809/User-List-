@@ -388,12 +388,21 @@ extension UserDetailViewController: UserPostsViewContract {
     }
     
     func showLoading() {
+        if currentTab == .posts {
+            postsEmptyStateView.isHidden = true
+            tableView.isHidden = true
+        }
         activityIndicator.startAnimating()
         tableView.isUserInteractionEnabled = false
     }
     
     func hideLoading() {
         activityIndicator.stopAnimating()
+        tableView.isHidden = false
         tableView.isUserInteractionEnabled = true
+        if currentTab == .posts {
+            tableView.reloadData()
+            updateEmptyState()
+        }
     }
 }

@@ -99,7 +99,7 @@ final class UsersListViewController: UIViewController {
     private let noResultsTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = LocalizationManager.Users.NoResults.title
+        label.text = NSLocalizedString("users.noResults.title", comment: "")
         label.font = ThemeManager.Typography.titleSemibold
         label.textColor = ThemeManager.Colors.Text.primary
         label.textAlignment = .center
@@ -109,7 +109,7 @@ final class UsersListViewController: UIViewController {
     private let noResultsMessageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = LocalizationManager.Users.NoResults.message
+        label.text = NSLocalizedString("users.noResults.message", comment: "")
         label.font = ThemeManager.Typography.smallRegular
         label.textColor = ThemeManager.Colors.Text.secondary
         label.textAlignment = .center
@@ -354,10 +354,13 @@ final class UsersListViewController: UIViewController {
             message: LocalizationManager.Users.Recent.ClearAlert.message,
             preferredStyle: .alert
         )
+        
         alert.addAction(UIAlertAction(title: LocalizationManager.Users.Recent.ClearAlert.cancel, style: .cancel))
+        
         alert.addAction(UIAlertAction(title: LocalizationManager.Users.Recent.ClearAlert.confirm, style: .destructive) { [weak self] _ in
             SearchHistoryManager.shared.clearHistory()
             self?.loadSearchHistory()
+            self?.recentSearchesTableView.reloadData()
             self?.showInitialState()
         })
         present(alert, animated: true)
@@ -482,12 +485,21 @@ extension UsersListViewController: UsersListViewContract {
     
     func showLoading() {
         if refreshControl.isRefreshing == false {
+            firstLaunchEmptyView.isHidden = true
+            recentSearchesView.isHidden = true
+            tableView.isHidden = true
+            noResultsEmptyView.isHidden = true
             activityIndicator.startAnimating()
         }
     }
-    
+
     func hideLoading() {
         activityIndicator.stopAnimating()
         refreshControl.endRefreshing()
+        
+        let searchText = searchController.searchBar.text ?? ""
+        let isSearching = !searchText.isEmpty
+        let hasResults = !users.isEmpty
+        updateViewStates(searching: isSearching, hasResults: hasResults, searchText: searchText)
     }
 }

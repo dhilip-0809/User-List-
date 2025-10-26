@@ -23,8 +23,8 @@
 "users.welcome.message" = "Start typing in the search bar above to find users by their name or username";
 
 // No Results
-"noResults.title" = "No Results Found";
-"noResults.message" = "No users found. Try searching with a different name.";
+"users.noResults.title" = "No Results Found";
+"users.noResults.message" = "No users found. Try searching with a different name.";
 
 // Recent Searches
 "users.recent.header" = "RECENT SEARCHES";

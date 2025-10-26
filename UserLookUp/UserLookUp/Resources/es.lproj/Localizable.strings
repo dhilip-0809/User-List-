@@ -23,8 +23,8 @@
 "users.welcome.message" = "Empieza a escribir en la barra de búsqueda arriba para encontrar usuarios por su nombre o nombre de usuario";
 
 // No Results
-"noResults.title" = "No Se Encontraron Resultados";
-"noResults.message" = "No se encontraron usuarios. Intenta buscar con un nombre diferente.";
+"users.noResults.title" = "No Se Encontraron Resultados";
+"users.noResults.message" = "No se encontraron usuarios. Intenta buscar con un nombre diferente.";
 
 // Recent Searches
 "users.recent.header" = "BÚSQUEDAS RECIENTES";

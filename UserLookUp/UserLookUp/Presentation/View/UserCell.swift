@@ -124,8 +124,8 @@ final class UserCell: UITableViewCell {
     }
     
     func configure(with user: User, at indexPath: IndexPath) {
-        usernameLabel.text = user.username
-        nameLabel.text = user.name
+        usernameLabel.text = user.name
+        nameLabel.text = user.username
         
         let firstName = user.name.components(separatedBy: " ").first ?? user.name
         if let firstCharacter = firstName.first {
