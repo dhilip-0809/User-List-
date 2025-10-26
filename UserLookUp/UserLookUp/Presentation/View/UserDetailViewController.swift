@@ -300,6 +300,7 @@ extension UserDetailViewController: UITableViewDataSource, UITableViewDelegate {
         case .address:
             let cell = tableView.dequeueReusableCell(withIdentifier: "basic", for: indexPath)
             cell.selectionStyle = .none
+            cell.accessoryType = .none
             var cfg = cell.defaultContentConfiguration()
             
             let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
@@ -320,6 +321,7 @@ extension UserDetailViewController: UITableViewDataSource, UITableViewDelegate {
         case .company:
             let cell = tableView.dequeueReusableCell(withIdentifier: "basic", for: indexPath)
             cell.selectionStyle = .none
+            cell.accessoryType = .none
             var cfg = cell.defaultContentConfiguration()
             
             if indexPath.row == 0 {
